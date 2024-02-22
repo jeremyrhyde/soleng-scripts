@@ -1,0 +1,70 @@
+{
+    "components": [
+      {
+        "model": "webcam",
+        "type": "camera",
+        "namespace": "rdk",
+        "attributes": {
+          "video_path": "EAB7A68F-EC2B-4487-AADF-D8A91C1CB782"
+        },
+        "depends_on": [],
+        "name": "webcam"
+      },
+      {
+        "type": "generic",
+        "namespace": "rdk",
+        "attributes": {},
+        "depends_on": [],
+        "name": "sound_player",
+        "model": "jeremyrhyde:generic:play-sound"
+      }
+    ],
+    "modules": [
+      {
+        "version": "latest",
+        "type": "registry",
+        "name": "viam_deepface-identification",
+        "module_id": "viam:deepface-identification"
+      },
+      {
+        "type": "registry",
+        "name": "jeremyrhyde_play-sound",
+        "module_id": "jeremyrhyde:play-sound",
+        "version": "0.0.0"
+      }
+    ],
+    "services": [
+      {
+        "type": "vision",
+        "namespace": "rdk",
+        "model": "viam:vision:deepface-identification",
+        "attributes": {
+          "picture_directory": "/Users/jeremyhyde/Development/soleng-scripts/play_sound/deepfaces",
+          "camera_name": "webcam"
+        },
+        "name": "deep_face_detection"
+      }
+    ],
+    "agent_config": {
+      "subsystems": {
+        "agent-provisioning": {
+          "pin_url": "",
+          "disable_subsystem": false,
+          "release_channel": "stable",
+          "pin_version": ""
+        },
+        "viam-agent": {
+          "release_channel": "stable",
+          "pin_version": "",
+          "pin_url": "",
+          "disable_subsystem": false
+        },
+        "viam-server": {
+          "disable_subsystem": false,
+          "release_channel": "stable",
+          "pin_version": "",
+          "pin_url": ""
+        }
+      }
+    }
+  }
