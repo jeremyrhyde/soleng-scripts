@@ -1,0 +1,42 @@
+{
+    "jeremy" :{
+        "type": "file",
+        "sound_byte": "/Users/jeremyhyde/Development/soleng-scripts/play_sound/sounds/EyeOfTheTiger_trimmed.mp3" 
+    },
+    "bill": {
+        "type": "file",
+        "sound_byte": "/Users/jeremyhyde/Development/soleng-scripts/play_sound/sounds/BillNye_trimmed.mp3"
+    },
+    "edouard": {
+        "type": "file",
+        "sound_byte": "/Users/jeremyhyde/Development/soleng-scripts/play_sound/sounds/HeartbreakHotel_trimmed.mp3" 
+    },
+    "jon-aborn": {
+        "type": "file",
+        "sound_byte": "/Users/jeremyhyde/Development/soleng-scripts/play_sound/sounds/ScarletBegonias_trimmed.mp3" 
+    },
+    "pete": {
+        "type": "file",
+        "sound_byte": "/Users/jeremyhyde/Development/soleng-scripts/play_sound/sounds/AmericanIdiot_trimmed.mp3"
+    },
+    "shawn": {
+        "type": "file",
+        "sound_byte": "/Users/jeremyhyde/Development/soleng-scripts/play_sound/sounds/CrazyTrain_trimmed.mp3"
+    },
+    "chris": {
+        "type": "file",
+        "sound_byte": "/Users/jeremyhyde/Development/soleng-scripts/play_sound/sounds/CircleOfLife_trimmed.mp3"
+    },
+    "alexis": {
+        "type": "message",
+        "sound_byte": "Hello Alexis"
+    },
+    "jack": {
+        "type": "message",
+        "sound_byte": "Hello Jack"
+    },
+    "jess": {
+        "type": "message",
+        "sound_byte": "Hello Jess"
+    }
+}

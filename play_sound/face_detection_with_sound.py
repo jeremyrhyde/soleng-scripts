@@ -23,7 +23,7 @@ async def main():
     robot = await connect()
 
     # Open and load data file
-    f = open("face-to-sound.json")
+    f = open("face-to-hello.json")
     sound_map = json.load(f)
     f.close()
 
