@@ -1,5 +1,9 @@
 import asyncio
 import time
+import json
+
+from PIL import Image 
+from datetime import datetime, timedelta
 
 from viam.robot.client import RobotClient
 from viam.rpc.dial import Credentials, DialOptions
@@ -18,44 +22,53 @@ async def connect():
 async def main():
     robot = await connect()
 
+    # Open and load data file
+    f = open("face-to-sound.json")
+    sound_map = json.load(f)
+    f.close()
+
     # Get webcam (camera component)
     webcam = Camera.from_robot(robot, "webcam")
 
     # Get face_detector (vision service)
-    face_detector = VisionClient.from_robot(robot, "face_detection")
+    face_detector = VisionClient.from_robot(robot, "deep_face_detection")
 
     # Get sound_player (generic component)
     sound_player = Generic.from_robot(robot, "sound_player")
 
     # Start loop
-    user_input = input("Press <Enter> to start: ")
+    input("Press <Enter> to start: ")
     prev_face_detections = []
     while True:
-        if user_input == "Q":
+        try:
+            for _ in range(0,3):
+                await webcam.get_image()
+
+            init_time = datetime.now()
+            webcam_return_value = await webcam.get_image()
+            print(datetime.now()-init_time)
+            face_detections = await face_detector.get_detections(webcam_return_value)
+            print(datetime.now()-init_time)
+            #face_detections = await face_detector.get_detections_from_camera("webcam")
+        
+            # Iterate through detections to determine which sound_byte to play
+            new_face_detections = []
+            for detection in face_detections:
+                name = detection.class_name
+                if name in sound_map.keys():
+                    new_face_detections.append(name)
+                    if name not in prev_face_detections:
+                        await sound_player.do_command({sound_map[name]["type"]:sound_map[name]["sound_byte"]})
+
+            print("Detections: " + str(new_face_detections))
+            prev_face_detections = new_face_detections
+            
+            time.sleep(1)
+        except:
             break
 
-        webcam_return_value = await webcam.get_image()
-        face_detections = await face_detector.get_detections(webcam_return_value)
-        #face_detections = await face_detector.get_detections_from_camera("webcam")
-    
-        new_face_detections = []
-        for detection in face_detections:
-            new_face_detections.append(detection.class_name)
-            if detection.class_name == "jeremy" and "jeremy" not in prev_face_detections:
-                sound_player_return_value = await sound_player.do_command({"message":"hello jeremy"})
-                print(f"sound_player do_command return value: {sound_player_return_value}") 
-
-            if detection.class_name == "bill" and "bill" not in prev_face_detections:
-                sound_player_return_value = await sound_player.do_command({"message":"hello bill"})
-                print(f"sound_player do_command return value: {sound_player_return_value}") 
-
-        print("Detections: " + str(new_face_detections))
-        prev_face_detections = new_face_detections
-
-        time.sleep(1)
-
-
     # Don't forget to close the machine when you're done!
+    await sound_player.do_command({"stop":""})
     await robot.close()
 
 if __name__ == '__main__':

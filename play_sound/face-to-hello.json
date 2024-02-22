@@ -1,0 +1,42 @@
+{
+    "jeremy" :{
+        "type": "message",
+        "sound_byte": "Hello Jeremy"
+    },
+    "bill": {
+        "type": "message",
+        "sound_byte": "Hello Bill"
+    },
+    "edouard": {
+        "type": "message",
+        "sound_byte": "Hello Edouard"
+    },
+    "jon-aborn": {
+        "type": "message",
+        "sound_byte": "Hello Jon"
+    },
+    "pete": {
+        "type": "message",
+        "sound_byte": "Hello Pete"
+    },
+    "shawn": {
+        "type": "message",
+        "sound_byte": "Hello Shawn"
+    },
+    "chris": {
+        "type": "message",
+        "sound_byte": "Hello Chris"
+    },
+    "alexis": {
+        "type": "message",
+        "sound_byte": "Hello Alexis"
+    },
+    "jack": {
+        "type": "message",
+        "sound_byte": "Hello Jack"
+    },
+    "jess": {
+        "type": "message",
+        "sound_byte": "Hello Jess"
+    }
+}
