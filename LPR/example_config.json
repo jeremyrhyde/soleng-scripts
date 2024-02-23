@@ -1,0 +1,97 @@
+{
+  "services": [
+    {
+      "name": "LPR-detector",
+      "type": "vision",
+      "namespace": "rdk",
+      "model": "viam-labs:vision:yolov5",
+      "attributes": {
+        "model_location": "/Users/jeremyhyde/Downloads/yolo5m_LPR.pt"
+      },
+      "depends_on": [
+        "webcam"
+      ]
+    },
+    {
+      "name": "license-plates",
+      "type": "vision",
+      "namespace": "rdk",
+      "model": "felixreichenbach:vision:ocr",
+      "attributes": {
+        "languages": [
+          "eng"
+        ],
+        "parameters": {
+          "tessedit_char_blacklist": "*+",
+          "tessedit_pageseg_mode": "7"
+        },
+        "tessdata_local": "./tessdata/",
+        "tessdata_remote": "https://github.com/tesseract-ocr/tessdata_fast/raw/main/"
+      }
+    }
+  ],
+  "agent_config": {
+    "subsystems": {
+      "viam-agent": {
+        "release_channel": "stable",
+        "pin_version": "",
+        "pin_url": "",
+        "disable_subsystem": false
+      },
+      "viam-server": {
+        "pin_version": "",
+        "pin_url": "",
+        "disable_subsystem": false,
+        "release_channel": "stable"
+      },
+      "agent-provisioning": {
+        "release_channel": "stable",
+        "pin_version": "",
+        "pin_url": "",
+        "disable_subsystem": false
+      }
+    }
+  },
+  "components": [
+    {
+      "name": "webcam",
+      "model": "webcam",
+      "type": "camera",
+      "namespace": "rdk",
+      "attributes": {},
+      "depends_on": []
+    },
+    {
+      "name": "transform",
+      "model": "transform",
+      "type": "camera",
+      "namespace": "rdk",
+      "attributes": {
+        "source": "webcam",
+        "pipeline": [
+          {
+            "attributes": {
+              "confidence_threshold": 0.3,
+              "detector_name": "LPR-detector"
+            },
+            "type": "detections"
+          }
+        ]
+      },
+      "depends_on": []
+    }
+  ],
+  "modules": [
+    {
+      "type": "registry",
+      "name": "viam-labs_YOLOv5",
+      "module_id": "viam-labs:YOLOv5",
+      "version": "0.0.1"
+    },
+    {
+      "name": "ocr",
+      "executable_path": "/Users/jeremyhyde/Development/soleng/bin/ocr",
+      "type": "local"
+    }
+  ]
+}
