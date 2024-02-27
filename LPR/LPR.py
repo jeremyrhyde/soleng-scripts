@@ -26,7 +26,7 @@ async def main():
     webcam = Camera.from_robot(robot, "webcam")
 
     # Recognize license plates
-    lpr_detector = VisionClient.from_robot(robot, "LPR-detector")
+    lpr_detector = VisionClient.from_robot(robot, "ml")
 
     # Isolate text
     ocr = VisionClient.from_robot(robot, "license-plates")
@@ -43,8 +43,8 @@ async def main():
         
             # Iterate through LPR detections
             for lpr_detection in lpr_detections:
-                if lpr_detection.confidence > 0.3:
-
+                if lpr_detection.confidence > .3 and lpr_detection.x_min != lpr_detection.x_max:
+                    print(lpr_detection)
                     # Crop image using detected bounding box
                     cropped_image = image.crop((lpr_detection.x_min, lpr_detection.y_min, 
                                                lpr_detection.x_max, lpr_detection.y_max))
