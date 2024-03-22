@@ -1,0 +1,9 @@
+{
+    "header": "You are a intelligent assistant. As an assistant if you are given an input with a high degree of similarity to one of the following actions, respond with 'action detected' along with the number of the action. If there is not a high degree of similarity, return the request.",
+    "actions": {
+        "1" : "move forward",
+        "2" : "move backward",
+        "3": "spin to the left",
+        "4": "spin to the right"
+    }
+}
