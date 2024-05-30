@@ -11,6 +11,13 @@ from viam.components.camera import Camera
 from viam.components.generic import Generic
 from viam.services.vision import VisionClient
 
+async def connectrover():
+    opts = RobotClient.Options.with_api_key(
+      api_key='20cqh9adz7c6fkiih9ppbr1go0gr41y4',
+      api_key_id='097504c3-1569-464a-bf81-53805bf93dae'
+    )
+    return await RobotClient.at_address('laptop-main.muhvcb3otx.viam.cloud', opts)
+
 
 async def connect():
     opts = RobotClient.Options.with_api_key(
@@ -21,7 +28,7 @@ async def connect():
 
 async def main():
     robot = await connect()
-
+    roverrobot = await connectrover()
     # Open and load data file
     f = open("face-to-hello.json")
     sound_map = json.load(f)
@@ -31,10 +38,10 @@ async def main():
     webcam = Camera.from_robot(robot, "webcam")
 
     # Get face_detector (vision service)
-    face_detector = VisionClient.from_robot(robot, "deep_face_detection")
+    face_detector = VisionClient.from_robot(robot, "face-detector")
 
     # Get sound_player (generic component)
-    sound_player = Generic.from_robot(robot, "sound_player")
+    sound_player = Generic.from_robot(roverrobot, "sound_player")
 
     # Start loop
     input("Press <Enter> to start: ")
