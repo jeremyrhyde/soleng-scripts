@@ -41,10 +41,11 @@ async def main():
             # Iterate through detections to determine which sound_byte to play
             print("Detections: ")
             for detection in face_detections:
+
                 print("- {}".format(detection.class_name))
 
                 # Handle detections of 'jeremy'
-                if detection.class_name == "jeremy":
+                if detection.class_name == "recycle" and detection.confidence > 0.8:
                     await rover.spin(720, rotational_speed) 
 
                 # Handle detections of 'hazal'
@@ -56,7 +57,6 @@ async def main():
 
                 # -----------------------------------
                 # ADD DETECTION OF NEW PERSON
-
                 # -----------------------------------
                 
             time.sleep(1)

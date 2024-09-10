@@ -51,7 +51,7 @@ async def main():
     # Get red_detector (vision service)
     red_detector = VisionClient.from_robot(robot, "red_detector")
 
-    # Get sound_player (generic component)
+    # Get stepper motor (Motor component)
     motor = Motor.from_robot(robot, "stepper")
 
     # Start loop

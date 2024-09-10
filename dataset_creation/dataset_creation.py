@@ -1,16 +1,18 @@
 import asyncio
+import io
 
 from datetime import datetime
+from PIL import Image
 
 from viam.robot.client import RobotClient
 from viam.components.camera import Camera 
 
 async def connect():
     opts = RobotClient.Options.with_api_key( 
-        api_key='20cqh9adz7c6fkiih9ppbr1go0gr41y4',
-        api_key_id='097504c3-1569-464a-bf81-53805bf93dae'
+        api_key='tfpk14dibqm2197nur4cwii2xokqob6u',
+        api_key_id='500e242d-e560-4eac-8156-fcbd4af0dd7a'
     )
-    return await RobotClient.at_address('laptop-main.muhvcb3otx.viam.cloud', opts)
+    return await RobotClient.at_address('laptop-new-main.muhvcb3otx.viam.cloud', opts)
 
 
 async def main():
@@ -28,15 +30,17 @@ async def main():
         if cmd == "Q" or cmd == "q":
             break
         try:
-            image = await webcam.get_image()
+            vimage = await webcam.get_image()
             time = datetime.now()
             timestamp = time.isoformat('T')
             timestamp_filename = timestamp.replace(":","_") + ".png"
 
             # Save image with timestamp
+            image = Image.open(io.BytesIO(vimage.data))
             image.save("/Users/jeremyhyde/.viam/capture/rdk_component_camera/webcam/" + timestamp_filename)
                 
-        except:
+        except Exception as e:
+            print(e)
             continue
 
     # Don't forget to close the machine when you're done!
