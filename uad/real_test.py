@@ -1,4 +1,8 @@
 import asyncio
+import time
+import csv 
+from io import BytesIO
+from PIL import Image
 from datetime import datetime
 from viam.robot.client import RobotClient
 from viam.components.camera import Camera 
@@ -6,8 +10,8 @@ from viam.components.camera import Camera
 
 async def connect():
     opts = RobotClient.Options.with_api_key( 
-        api_key='2r9c7hpk97qik8i7aolst70yur1nkd0n',
-        api_key_id='0cc9c563-1dc8-4553-9bf7-f4c6ae8d71ad'
+        api_key="<API_KEY>",
+        api_key_id="<API_KEY_ID>"
     )
     return await RobotClient.at_address('realsensetest-main.unc6fit79p.viam.cloud', opts)
 
@@ -32,17 +36,19 @@ async def main():
             now = datetime.now()
 
             filename_jpg = dir + "rgb/{}.jpg".format(now.isoformat('T'))
-            with open(filename_jpg, "wb") as file:
-                file.write(images[0].data)
+            image = Image.open(BytesIO(images[0].data))
+            image.save(filename_jpg)
 
-            filename_pcd = dir + "pcd/{}.pcd".format(now.isoformat('T'))
-            with open(filename_pcd, "wb") as file:
-                file.write(images[1].data)
-            
+            filename_pcd = dir + "pcd/{}.csv".format(now.isoformat('T'))
+            with open(filename_pcd, "w", newline="") as file:
+                writer = csv.writer(file)
+                writer.writerows(images[1].bytes_to_depth_array())
             
             print("saving images: {} | {}".format(filename_jpg, filename_pcd))
 
             i = i + 1
+
+            time.sleep(1)
 
         except Exception as e:
             print("Exception: " + str(e))

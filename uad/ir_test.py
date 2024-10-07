@@ -1,47 +1,53 @@
 import asyncio
+import csv
 from datetime import datetime
 from viam.robot.client import RobotClient
-from viam.components.camera import Camera 
+from viam.components.sensor import Sensor 
 
 
 async def connect():
     opts = RobotClient.Options.with_api_key( 
-        api_key='7kb0piio6bnuh3fb596gj5glz7jnhi0j',
-        api_key_id='1853638c-1949-4db3-812f-c37b9b22c877'
+        api_key="<API_KEY>",
+        api_key_id="<API_KEY_ID>"
     )
-    return await RobotClient.at_address('irtest-main.unc6fit79p.viam.cloud', opts)
+    return await RobotClient.at_address('toftest-main.unc6fit79p.viam.cloud', opts)
 
 async def main():
     robot = await connect()
 
-    # Get webcam (camera component)
-    thermal_camera = Camera.from_robot(robot, "thermal-cam")
+    # Get tof (sensor component)
+    tof_sensor = Sensor.from_robot(robot, "tof-sensor")
 
-    # Clear buffer 
-    for _ in range(0,3):
-        await thermal_camera.get_image()
-
-    dir = "/home/ubuntu/data/thermal_camera/"
+    dir = "/home/ubuntu/data/tof_sensor/"
 
     # Start loop
     i = 0
-    while True:
-        try:
-            image = await thermal_camera.get_image()
-            now = datetime.now()
+    now = datetime.now()
+    with open(dir + "tof_results_{}.csv".format(now.isoformat('T')), 'w', newline='') as file:
+        writer = csv.writer(file)
+        while i < 1000:
+            print("{}/1000".format(i))
+            try:
+                # Get readings
+                readings = await tof_sensor.get_readings()
+                now = datetime.now()
 
-            filename = dir + "{}.jpg".format(now.isoformat('T'))
-            image.save(filename)
+                if i == 0:
+                    keys = list(readings.keys())
+                    keys.insert(0, "Time")
+                    writer.writerow(keys)
 
-            print("saving image: {}".format(filename))
+                values = list(readings.values())
+                values.insert(0, now.isoformat('T'))
+                writer.writerow(values)
 
-            i = i + 1
-
-        except Exception as e:
-            print("Exception: " + str(e))
-
-            if e == KeyboardInterrupt:
-                break
+                i = i + 1
+            except Exception as e:
+                print("Exception: " + str(e)) 
+                
+                if e == KeyboardInterrupt:
+                    break
+            
 
     # Don't forget to close the machine when you're done!
     await robot.close()
